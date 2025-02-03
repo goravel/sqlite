@@ -8,10 +8,11 @@ import (
 	"github.com/goravel/framework/contracts/log"
 	databasegorm "github.com/goravel/framework/database/gorm"
 	"github.com/goravel/framework/support/carbon"
-	"github.com/goravel/sqlite/contracts"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 	"gorm.io/plugin/dbresolver"
+
+	"github.com/goravel/sqlite/contracts"
 )
 
 type Gorm struct {

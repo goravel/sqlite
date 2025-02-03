@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
+	mocksconfig "github.com/goravel/framework/mocks/config"
 	"github.com/stretchr/testify/suite"
 
-	mocksconfig "github.com/goravel/framework/mocks/config"
 	"github.com/goravel/sqlite/contracts"
 )
 

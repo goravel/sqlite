@@ -10,8 +10,9 @@ import (
 	"github.com/goravel/framework/contracts/log"
 	"github.com/goravel/framework/contracts/testing"
 	"github.com/goravel/framework/errors"
-	"github.com/goravel/sqlite/contracts"
 	"gorm.io/gorm"
+
+	"github.com/goravel/sqlite/contracts"
 )
 
 var _ driver.Driver = &Sqlite{}

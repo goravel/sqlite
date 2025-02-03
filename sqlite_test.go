@@ -5,9 +5,10 @@ import (
 
 	mocksconfig "github.com/goravel/framework/mocks/config"
 	"github.com/goravel/framework/testing/utils"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/goravel/sqlite/contracts"
 	mocks "github.com/goravel/sqlite/mocks"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestVersion(t *testing.T) {

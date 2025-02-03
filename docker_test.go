@@ -63,7 +63,8 @@ INSERT INTO users (name) VALUES ('goravel');
 	s.NoError(err)
 	s.NotNil(databaseDriver)
 
-	s.Nil(s.docker.Shutdown())
+	s.NoError(s.docker.Shutdown())
+	s.NoError(databaseDriver.Shutdown())
 }
 
 func (s *DockerTestSuite) TestDatabase() {
@@ -80,5 +81,6 @@ func (s *DockerTestSuite) TestDatabase() {
 	_, err = dockerImpl.connect()
 	s.Nil(err)
 
-	s.Nil(s.docker.Shutdown())
+	s.NoError(s.docker.Shutdown())
+	s.NoError(docker.Shutdown())
 }
