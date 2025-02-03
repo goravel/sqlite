@@ -1,0 +1,11 @@
+name: Test
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  test:
+    uses: goravel/.github/.github/workflows/test_linux.yml@master
+    secrets: inherit
+    

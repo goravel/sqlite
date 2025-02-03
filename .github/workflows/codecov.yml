@@ -1,0 +1,10 @@
+name: Codecov
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  codecov:
+    uses: goravel/.github/.github/workflows/codecov.yml@master
+    secrets: inherit
