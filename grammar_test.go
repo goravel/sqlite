@@ -156,6 +156,22 @@ func (s *GrammarSuite) TestCompileIndex() {
 	s.Equal(`create index "users" on "goravel_users" ("role_id", "permission_id")`, s.grammar.CompileIndex(mockBlueprint, command))
 }
 
+func (s *GrammarSuite) TestCompileRenameColumn() {
+	mockBlueprint := mocksschema.NewBlueprint(s.T())
+	mockColumn := mocksschema.NewColumnDefinition(s.T())
+
+	mockBlueprint.EXPECT().GetTableName().Return("users").Once()
+
+	sql, err := s.grammar.CompileRenameColumn(nil, mockBlueprint, &contractsschema.Command{
+		Column: mockColumn,
+		From:   "before",
+		To:     "after",
+	})
+
+	s.NoError(err)
+	s.Equal(`alter table "goravel_users" rename column "before" to "after"`, sql)
+}
+
 func (s *GrammarSuite) TestCompileRenameIndex() {
 	var (
 		mockSchema    *mocksschema.Schema
