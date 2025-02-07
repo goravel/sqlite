@@ -7,7 +7,7 @@ import (
 
 const (
 	Binding = "goravel.sqlite"
-	Name    = "sqlite"
+	Name    = "SQLite"
 )
 
 var App foundation.Application
