@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/glebarez/sqlite"
-	"github.com/goravel/framework/contracts/testing"
+	"github.com/goravel/framework/contracts/testing/docker"
 	"github.com/goravel/framework/support/file"
 	gormio "gorm.io/gorm"
 )
@@ -27,13 +27,14 @@ func (r *Docker) Build() error {
 	return nil
 }
 
-func (r *Docker) Config() testing.DatabaseConfig {
-	return testing.DatabaseConfig{
+func (r *Docker) Config() docker.DatabaseConfig {
+	return docker.DatabaseConfig{
 		Database: r.database,
+		Driver:   Name,
 	}
 }
 
-func (r *Docker) Database(name string) (testing.DatabaseDriver, error) {
+func (r *Docker) Database(name string) (docker.DatabaseDriver, error) {
 	docker := NewDocker(name)
 	if err := docker.Build(); err != nil {
 		return nil, err
@@ -58,7 +59,7 @@ func (r *Docker) Fresh() error {
 	return nil
 }
 
-func (r *Docker) Image(image testing.Image) {
+func (r *Docker) Image(image docker.Image) {
 }
 
 func (r *Docker) Ready() error {
