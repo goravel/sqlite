@@ -10,6 +10,7 @@ import (
 	"github.com/goravel/framework/contracts/log"
 	"github.com/goravel/framework/contracts/testing/docker"
 	"github.com/goravel/framework/errors"
+	"github.com/jmoiron/sqlx"
 	"gorm.io/gorm"
 
 	"github.com/goravel/sqlite/contracts"
@@ -45,10 +46,24 @@ func (r *Sqlite) Config() database.Config {
 	}
 }
 
+func (r *Sqlite) DB() (*sqlx.DB, error) {
+	gormDB, _, err := r.Gorm()
+	if err != nil {
+		return nil, err
+	}
+
+	db, err := gormDB.DB()
+	if err != nil {
+		return nil, err
+	}
+
+	return sqlx.NewDb(db, Name), nil
+}
+
 func (r *Sqlite) Docker() (docker.DatabaseDriver, error) {
 	writers := r.config.Writes()
 	if len(writers) == 0 {
-		return nil, errors.OrmDatabaseConfigNotFound
+		return nil, errors.DatabaseConfigNotFound
 	}
 
 	return NewDocker(writers[0].Database), nil
