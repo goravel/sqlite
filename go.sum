@@ -37,6 +37,8 @@ github.com/goravel/framework v1.15.2-0.20250207105840-b8242bc2a853 h1:YXeM98oAlu
 github.com/goravel/framework v1.15.2-0.20250207105840-b8242bc2a853/go.mod h1:5Il8ODw11sGkktLaEi1cKHIoI9P//wdcLSGjHGUsK58=
 github.com/goravel/framework v1.15.2-0.20250209050736-c63da33a6ac2 h1:BSmCZmyQtJ7jFeVCcexQiSBC9o/tyhDNZsuO23e2pz8=
 github.com/goravel/framework v1.15.2-0.20250209050736-c63da33a6ac2/go.mod h1:msPmnGdCt7226/Mw48qh/0iExOT/r6rlpzUhIzfTAfA=
+github.com/goravel/framework v1.15.2-0.20250210073917-7edffd9b4390 h1:B73mifdcXKESRC+JVx6xFavNCs1CN0S9VmlYYRDxsII=
+github.com/goravel/framework v1.15.2-0.20250210073917-7edffd9b4390/go.mod h1:msPmnGdCt7226/Mw48qh/0iExOT/r6rlpzUhIzfTAfA=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
 github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
 github.com/jinzhu/now v1.1.5 h1:/o9tlHleP7gOFmsnYNz3RGnqzefHA47wQpKrrdTIwXQ=
