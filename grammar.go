@@ -256,6 +256,10 @@ func (r *Grammar) CompileTables(database string) string {
 	return "select name from sqlite_master where type = 'table' and name not like 'sqlite_%' order by name"
 }
 
+func (r *Grammar) CompileTableComment(_ contractsschema.Blueprint, _ *contractsschema.Command) string {
+	return ""
+}
+
 func (r *Grammar) CompileTypes() string {
 	return ""
 }
