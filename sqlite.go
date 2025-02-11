@@ -1,6 +1,7 @@
 package sqlite
 
 import (
+	"database/sql"
 	"fmt"
 
 	"github.com/goravel/framework/contracts/config"
@@ -10,7 +11,6 @@ import (
 	"github.com/goravel/framework/contracts/log"
 	"github.com/goravel/framework/contracts/testing/docker"
 	"github.com/goravel/framework/errors"
-	"github.com/jmoiron/sqlx"
 	"gorm.io/gorm"
 
 	"github.com/goravel/sqlite/contracts"
@@ -46,18 +46,13 @@ func (r *Sqlite) Config() database.Config {
 	}
 }
 
-func (r *Sqlite) DB() (*sqlx.DB, error) {
+func (r *Sqlite) DB() (*sql.DB, error) {
 	gormDB, _, err := r.Gorm()
 	if err != nil {
 		return nil, err
 	}
 
-	db, err := gormDB.DB()
-	if err != nil {
-		return nil, err
-	}
-
-	return sqlx.NewDb(db, Name), nil
+	return gormDB.DB()
 }
 
 func (r *Sqlite) Docker() (docker.DatabaseDriver, error) {
