@@ -39,6 +39,7 @@ func (r *Sqlite) Config() database.Config {
 
 	return database.Config{
 		Connection: writers[0].Connection,
+		Dsn:        writers[0].Dsn,
 		Database:   writers[0].Database,
 		Driver:     Name,
 		Prefix:     writers[0].Prefix,
