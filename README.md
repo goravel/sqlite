@@ -45,7 +45,7 @@ import (
         "prefix":   "",
         "singular": false,
         "via": func() (driver.Driver, error) {
-            return sqlitefacades.Sqlite("sqlite"), nil
+            return sqlitefacades.Sqlite("sqlite")
         },
         // Optional
         "read": []contracts.Config{

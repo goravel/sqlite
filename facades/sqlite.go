@@ -1,26 +1,25 @@
 package facades
 
 import (
-	"log"
+	"fmt"
 
 	"github.com/goravel/framework/contracts/database/driver"
 
 	"github.com/goravel/sqlite"
 )
 
-func Sqlite(connection string) driver.Driver {
+func Sqlite(connection string) (driver.Driver, error) {
 	if sqlite.App == nil {
-		log.Fatalln("please register Sqlite service provider")
-		return nil
+
+		return nil, fmt.Errorf("please register sqlite service provider")
 	}
 
 	instance, err := sqlite.App.MakeWith(sqlite.Binding, map[string]any{
 		"connection": connection,
 	})
 	if err != nil {
-		log.Fatalln(err)
-		return nil
+		return nil, err
 	}
 
-	return instance.(*sqlite.Sqlite)
+	return instance.(*sqlite.Sqlite), nil
 }
