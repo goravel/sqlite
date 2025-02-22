@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/glebarez/sqlite"
 	"github.com/goravel/framework/contracts/config"
 	"github.com/goravel/framework/contracts/database"
 	"github.com/goravel/framework/contracts/database/driver"
@@ -63,6 +64,10 @@ func (r *Sqlite) Docker() (docker.DatabaseDriver, error) {
 	}
 
 	return NewDocker(writers[0].Database), nil
+}
+
+func (r *Sqlite) Explain(sql string, vars ...any) string {
+	return sqlite.Open("").Explain(sql, vars...)
 }
 
 func (r *Sqlite) Gorm() (*gorm.DB, driver.GormQuery, error) {
