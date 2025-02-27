@@ -6,7 +6,7 @@ import (
 
 	"github.com/glebarez/sqlite"
 	"github.com/goravel/framework/contracts/log"
-	databasegorm "github.com/goravel/framework/database/gorm"
+	"github.com/goravel/framework/database/logger"
 	"github.com/goravel/framework/support/carbon"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
@@ -93,7 +93,7 @@ func (r *Gorm) dns(config contracts.FullConfig) string {
 }
 
 func (r *Gorm) gormConfig() *gorm.Config {
-	logger := databasegorm.NewLogger(r.config.Config(), r.log)
+	logger := logger.NewLogger(r.config.Config(), r.log).ToGorm()
 	writeConfigs := r.config.Writes()
 	if len(writeConfigs) == 0 {
 		return nil
