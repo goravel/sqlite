@@ -20,9 +20,10 @@ import (
 var _ driver.Driver = &Sqlite{}
 
 type Sqlite struct {
-	config contracts.ConfigBuilder
-	db     *gorm.DB
-	log    log.Log
+	config  contracts.ConfigBuilder
+	db      *gorm.DB
+	log     log.Log
+	version string
 }
 
 func NewSqlite(config config.Config, log log.Log, connection string) *Sqlite {
@@ -44,7 +45,7 @@ func (r *Sqlite) Config() database.Config {
 		Database:   writers[0].Database,
 		Driver:     Name,
 		Prefix:     writers[0].Prefix,
-		Version:    r.version(),
+		Version:    r.getVersion(),
 	}
 }
 
@@ -93,7 +94,11 @@ func (r *Sqlite) Processor() contractsschema.Processor {
 	return NewProcessor()
 }
 
-func (r *Sqlite) version() string {
+func (r *Sqlite) getVersion() string {
+	if r.version != "" {
+		return r.version
+	}
+
 	instance, _, err := r.Gorm()
 	if err != nil {
 		return ""
@@ -103,8 +108,10 @@ func (r *Sqlite) version() string {
 		Value string
 	}
 	if err := instance.Raw("SELECT sqlite_version() AS value;").Scan(&version).Error; err != nil {
-		return fmt.Sprintf("UNKNOWN: %s", err)
+		r.version = fmt.Sprintf("UNKNOWN: %s", err)
+	} else {
+		r.version = version.Value
 	}
 
-	return version.Value
+	return r.version
 }

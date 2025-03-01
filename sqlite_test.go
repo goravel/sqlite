@@ -54,7 +54,7 @@ func TestVersion(t *testing.T) {
 		config: mockConfig,
 		log:    utils.NewTestLog(),
 	}
-	version := sqlserver.version()
+	version := sqlserver.getVersion()
 	assert.Contains(t, version, ".")
 	assert.NoError(t, docker.Shutdown())
 }
