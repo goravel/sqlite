@@ -33,8 +33,8 @@ github.com/google/pprof v0.0.0-20240409012703-83162a5b38cd h1:gbpYu9NMq8jhDVbvlG
 github.com/google/pprof v0.0.0-20240409012703-83162a5b38cd/go.mod h1:kf6iHlnVGwgKolg33glAes7Yg/8iWP8ukqeldJSO7jw=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
 github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
-github.com/goravel/framework v1.15.2-0.20250309035518-52dee9cd91b7 h1:WHn17XisWoCTu2C61Gw7shCYrumHUHRSzF0Zpl+Amh0=
-github.com/goravel/framework v1.15.2-0.20250309035518-52dee9cd91b7/go.mod h1:kOXxDnuVxtWcIyGJJoBEiUX4yHtL9fJsVWNR2EznQD0=
+github.com/goravel/framework v1.15.2-0.20250309082515-9a7bcbec1a43 h1:XcdvbT/+48goVkCWfjhwcmpvSn8NVxKSvSlRIhKddgk=
+github.com/goravel/framework v1.15.2-0.20250309082515-9a7bcbec1a43/go.mod h1:WaPeuuviQKql/S8HSNk+ZK3xukJsw++h1G74CjbEnmk=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
 github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
 github.com/jinzhu/now v1.1.5 h1:/o9tlHleP7gOFmsnYNz3RGnqzefHA47wQpKrrdTIwXQ=
