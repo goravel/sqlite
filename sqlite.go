@@ -8,7 +8,6 @@ import (
 	"github.com/goravel/framework/contracts/config"
 	"github.com/goravel/framework/contracts/database"
 	"github.com/goravel/framework/contracts/database/driver"
-	contractsschema "github.com/goravel/framework/contracts/database/schema"
 	"github.com/goravel/framework/contracts/log"
 	"github.com/goravel/framework/contracts/testing/docker"
 	"github.com/goravel/framework/errors"
@@ -50,7 +49,7 @@ func (r *Sqlite) Config() database.Config {
 }
 
 func (r *Sqlite) DB() (*sql.DB, error) {
-	gormDB, _, err := r.Gorm()
+	gormDB, err := r.Gorm()
 	if err != nil {
 		return nil, err
 	}
@@ -71,26 +70,26 @@ func (r *Sqlite) Explain(sql string, vars ...any) string {
 	return sqlite.Open("").Explain(sql, vars...)
 }
 
-func (r *Sqlite) Gorm() (*gorm.DB, driver.GormQuery, error) {
+func (r *Sqlite) Gorm() (*gorm.DB, error) {
 	if r.db != nil {
-		return r.db, NewQuery(), nil
+		return r.db, nil
 	}
 
 	db, err := NewGorm(r.config, r.log).Build()
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	r.db = db
 
-	return db, NewQuery(), nil
+	return db, nil
 }
 
-func (r *Sqlite) Grammar() contractsschema.Grammar {
+func (r *Sqlite) Grammar() driver.Grammar {
 	return NewGrammar(r.log, r.config.Writes()[0].Prefix)
 }
 
-func (r *Sqlite) Processor() contractsschema.Processor {
+func (r *Sqlite) Processor() driver.Processor {
 	return NewProcessor()
 }
 
@@ -99,7 +98,7 @@ func (r *Sqlite) getVersion() string {
 		return r.version
 	}
 
-	instance, _, err := r.Gorm()
+	instance, err := r.Gorm()
 	if err != nil {
 		return ""
 	}

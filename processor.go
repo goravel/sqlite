@@ -3,12 +3,12 @@ package sqlite
 import (
 	"strings"
 
-	"github.com/goravel/framework/contracts/database/schema"
+	"github.com/goravel/framework/contracts/database/driver"
 	"github.com/goravel/framework/support/collect"
 	"github.com/spf13/cast"
 )
 
-var _ schema.Processor = &Processor{}
+var _ driver.Processor = &Processor{}
 
 type Processor struct {
 }
@@ -17,9 +17,9 @@ func NewProcessor() *Processor {
 	return &Processor{}
 }
 
-func (r Processor) ProcessColumns(dbColumns []schema.DBColumn) []schema.Column {
+func (r Processor) ProcessColumns(dbColumns []driver.DBColumn) []driver.Column {
 	var primaryKeyNum int
-	collect.Map(dbColumns, func(dbColumn schema.DBColumn, _ int) bool {
+	collect.Map(dbColumns, func(dbColumn driver.DBColumn, _ int) bool {
 		if dbColumn.Primary {
 			primaryKeyNum++
 		}
@@ -27,7 +27,7 @@ func (r Processor) ProcessColumns(dbColumns []schema.DBColumn) []schema.Column {
 		return true
 	})
 
-	var columns []schema.Column
+	var columns []driver.Column
 	for _, dbColumn := range dbColumns {
 		ttype := strings.ToLower(dbColumn.Type)
 		typeNameParts := strings.SplitN(ttype, "(", 2)
@@ -36,7 +36,7 @@ func (r Processor) ProcessColumns(dbColumns []schema.DBColumn) []schema.Column {
 			typeName = typeNameParts[0]
 		}
 
-		columns = append(columns, schema.Column{
+		columns = append(columns, driver.Column{
 			Autoincrement: primaryKeyNum == 1 && dbColumn.Primary && ttype == "integer",
 			Default:       dbColumn.Default,
 			Name:          dbColumn.Name,
@@ -49,10 +49,10 @@ func (r Processor) ProcessColumns(dbColumns []schema.DBColumn) []schema.Column {
 	return columns
 }
 
-func (r Processor) ProcessForeignKeys(dbForeignKeys []schema.DBForeignKey) []schema.ForeignKey {
-	var foreignKeys []schema.ForeignKey
+func (r Processor) ProcessForeignKeys(dbForeignKeys []driver.DBForeignKey) []driver.ForeignKey {
+	var foreignKeys []driver.ForeignKey
 	for _, dbForeignKey := range dbForeignKeys {
-		foreignKeys = append(foreignKeys, schema.ForeignKey{
+		foreignKeys = append(foreignKeys, driver.ForeignKey{
 			Name:           dbForeignKey.Name,
 			Columns:        strings.Split(dbForeignKey.Columns, ","),
 			ForeignTable:   dbForeignKey.ForeignTable,
@@ -65,9 +65,9 @@ func (r Processor) ProcessForeignKeys(dbForeignKeys []schema.DBForeignKey) []sch
 	return foreignKeys
 }
 
-func (r Processor) ProcessIndexes(dbIndexes []schema.DBIndex) []schema.Index {
+func (r Processor) ProcessIndexes(dbIndexes []driver.DBIndex) []driver.Index {
 	var (
-		indexes      []schema.Index
+		indexes      []driver.Index
 		primaryCount int
 	)
 	for _, dbIndex := range dbIndexes {
@@ -75,7 +75,7 @@ func (r Processor) ProcessIndexes(dbIndexes []schema.DBIndex) []schema.Index {
 			primaryCount++
 		}
 
-		indexes = append(indexes, schema.Index{
+		indexes = append(indexes, driver.Index{
 			Columns: strings.Split(dbIndex.Columns, ","),
 			Name:    strings.ToLower(dbIndex.Name),
 			Primary: dbIndex.Primary,
@@ -84,7 +84,7 @@ func (r Processor) ProcessIndexes(dbIndexes []schema.DBIndex) []schema.Index {
 	}
 
 	if primaryCount > 1 {
-		indexes = collect.Filter(indexes, func(index schema.Index, _ int) bool {
+		indexes = collect.Filter(indexes, func(index driver.Index, _ int) bool {
 			return !index.Primary
 		})
 	}
@@ -92,6 +92,6 @@ func (r Processor) ProcessIndexes(dbIndexes []schema.DBIndex) []schema.Index {
 	return indexes
 }
 
-func (r Processor) ProcessTypes(types []schema.Type) []schema.Type {
+func (r Processor) ProcessTypes(types []driver.Type) []driver.Type {
 	return types
 }
