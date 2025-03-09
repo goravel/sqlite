@@ -7,7 +7,7 @@ toolchain go1.23.4
 require (
 	github.com/Masterminds/squirrel v1.5.4
 	github.com/glebarez/sqlite v1.11.0
-	github.com/goravel/framework v1.15.2-0.20250309082515-9a7bcbec1a43
+	github.com/goravel/framework v1.15.2-0.20250309092812-0d45fdd3fb26
 	github.com/spf13/cast v1.7.1
 	github.com/stretchr/testify v1.10.0
 	gorm.io/gorm v1.25.12

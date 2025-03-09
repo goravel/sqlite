@@ -162,11 +162,11 @@ func (s *GrammarSuite) TestCompileRenameColumn() {
 
 	mockBlueprint.EXPECT().GetTableName().Return("users").Once()
 
-	sql, err := s.grammar.CompileRenameColumn(nil, mockBlueprint, &contractsdriver.Command{
+	sql, err := s.grammar.CompileRenameColumn(mockBlueprint, &contractsdriver.Command{
 		Column: mockColumn,
 		From:   "before",
 		To:     "after",
-	})
+	}, nil)
 
 	s.NoError(err)
 	s.Equal(`alter table "goravel_users" rename column "before" to "after"`, sql)
@@ -174,43 +174,31 @@ func (s *GrammarSuite) TestCompileRenameColumn() {
 
 func (s *GrammarSuite) TestCompileRenameIndex() {
 	var (
-		mockSchema    *mocksdriver.Schema
 		mockBlueprint *mocksdriver.Blueprint
 	)
 
 	beforeEach := func() {
-		mockSchema = mocksdriver.NewSchema(s.T())
 		mockBlueprint = mocksdriver.NewBlueprint(s.T())
 	}
 
 	tests := []struct {
 		name    string
 		command *contractsdriver.Command
+		indexes []contractsdriver.Index
 		setup   func()
 		expect  []string
 	}{
-		{
-			name: "failed to get indexes",
-			setup: func() {
-				tableName := "users"
-				mockBlueprint.EXPECT().GetTableName().Return(tableName).Twice()
-				mockSchema.EXPECT().GetIndexes(tableName).Return(nil, assert.AnError).Once()
-				s.mockLog.EXPECT().Errorf("failed to get %s indexes: %v", tableName, assert.AnError).Once()
-			},
-		},
 		{
 			name: "index does not exist",
 			command: &contractsdriver.Command{
 				From: "users",
 			},
+			indexes: []contractsdriver.Index{
+				{
+					Name: "admins",
+				},
+			},
 			setup: func() {
-				tableName := "users"
-				mockBlueprint.EXPECT().GetTableName().Return(tableName).Once()
-				mockSchema.EXPECT().GetIndexes(tableName).Return([]contractsdriver.Index{
-					{
-						Name: "admins",
-					},
-				}, nil).Once()
 				s.mockLog.EXPECT().Warningf("index %s does not exist", "users").Once()
 			},
 		},
@@ -219,15 +207,13 @@ func (s *GrammarSuite) TestCompileRenameIndex() {
 			command: &contractsdriver.Command{
 				From: "users",
 			},
+			indexes: []contractsdriver.Index{
+				{
+					Name:    "users",
+					Primary: true,
+				},
+			},
 			setup: func() {
-				tableName := "users"
-				mockBlueprint.EXPECT().GetTableName().Return(tableName).Once()
-				mockSchema.EXPECT().GetIndexes(tableName).Return([]contractsdriver.Index{
-					{
-						Name:    "users",
-						Primary: true,
-					},
-				}, nil).Once()
 				s.mockLog.EXPECT().Warning("SQLite does not support altering primary keys").Once()
 			},
 		},
@@ -237,16 +223,15 @@ func (s *GrammarSuite) TestCompileRenameIndex() {
 				From: "users",
 				To:   "admins",
 			},
+			indexes: []contractsdriver.Index{
+				{
+					Columns: []string{"role_id", "permission_id"},
+					Name:    "users",
+					Unique:  true,
+				},
+			},
 			setup: func() {
-				tableName := "users"
-				mockBlueprint.EXPECT().GetTableName().Return(tableName).Twice()
-				mockSchema.EXPECT().GetIndexes(tableName).Return([]contractsdriver.Index{
-					{
-						Columns: []string{"role_id", "permission_id"},
-						Name:    "users",
-						Unique:  true,
-					},
-				}, nil).Once()
+				mockBlueprint.EXPECT().GetTableName().Return("users").Once()
 			},
 			expect: []string{
 				`drop index "users"`,
@@ -259,15 +244,14 @@ func (s *GrammarSuite) TestCompileRenameIndex() {
 				From: "users",
 				To:   "admins",
 			},
+			indexes: []contractsdriver.Index{
+				{
+					Columns: []string{"role_id", "permission_id"},
+					Name:    "users",
+				},
+			},
 			setup: func() {
-				tableName := "users"
-				mockBlueprint.EXPECT().GetTableName().Return(tableName).Twice()
-				mockSchema.EXPECT().GetIndexes(tableName).Return([]contractsdriver.Index{
-					{
-						Columns: []string{"role_id", "permission_id"},
-						Name:    "users",
-					},
-				}, nil).Once()
+				mockBlueprint.EXPECT().GetTableName().Return("users").Once()
 			},
 			expect: []string{
 				`drop index "users"`,
@@ -281,7 +265,7 @@ func (s *GrammarSuite) TestCompileRenameIndex() {
 			beforeEach()
 			test.setup()
 
-			s.Equal(test.expect, s.grammar.CompileRenameIndex(mockSchema, mockBlueprint, test.command))
+			s.Equal(test.expect, s.grammar.CompileRenameIndex(mockBlueprint, test.command, test.indexes))
 		})
 	}
 }

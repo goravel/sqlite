@@ -224,7 +224,7 @@ func (r *Grammar) CompileRename(blueprint driver.Blueprint, command *driver.Comm
 	return fmt.Sprintf("alter table %s rename to %s", r.wrap.Table(blueprint.GetTableName()), r.wrap.Table(command.To))
 }
 
-func (r *Grammar) CompileRenameColumn(_ driver.Schema, blueprint driver.Blueprint, command *driver.Command) (string, error) {
+func (r *Grammar) CompileRenameColumn(blueprint driver.Blueprint, command *driver.Command, _ []driver.Column) (string, error) {
 	return fmt.Sprintf("alter table %s rename column %s to %s",
 		r.wrap.Table(blueprint.GetTableName()),
 		r.wrap.Column(command.From),
@@ -232,13 +232,7 @@ func (r *Grammar) CompileRenameColumn(_ driver.Schema, blueprint driver.Blueprin
 	), nil
 }
 
-func (r *Grammar) CompileRenameIndex(s driver.Schema, blueprint driver.Blueprint, command *driver.Command) []string {
-	indexes, err := s.GetIndexes(blueprint.GetTableName())
-	if err != nil {
-		r.log.Errorf("failed to get %s indexes: %v", blueprint.GetTableName(), err)
-		return nil
-	}
-
+func (r *Grammar) CompileRenameIndex(blueprint driver.Blueprint, command *driver.Command, indexes []driver.Index) []string {
 	indexes = collect.Filter(indexes, func(index driver.Index, _ int) bool {
 		return index.Name == command.From
 	})
