@@ -28,7 +28,7 @@ func (r *Config) Connection() string {
 	return r.connection
 }
 
-func (r *Config) Reads() []contracts.FullConfig {
+func (r *Config) Readers() []contracts.FullConfig {
 	configs := r.config.Get(fmt.Sprintf("database.connections.%s.read", r.connection))
 	if readConfigs, ok := configs.([]contracts.Config); ok {
 		return r.fillDefault(readConfigs)
@@ -37,7 +37,7 @@ func (r *Config) Reads() []contracts.FullConfig {
 	return nil
 }
 
-func (r *Config) Writes() []contracts.FullConfig {
+func (r *Config) Writers() []contracts.FullConfig {
 	configs := r.config.Get(fmt.Sprintf("database.connections.%s.write", r.connection))
 	if writeConfigs, ok := configs.([]contracts.Config); ok {
 		return r.fillDefault(writeConfigs)

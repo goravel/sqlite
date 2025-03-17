@@ -114,12 +114,12 @@ func (_c *ConfigBuilder_Connection_Call) RunAndReturn(run func() string) *Config
 	return _c
 }
 
-// Reads provides a mock function with no fields
-func (_m *ConfigBuilder) Reads() []contracts.FullConfig {
+// Readers provides a mock function with no fields
+func (_m *ConfigBuilder) Readers() []contracts.FullConfig {
 	ret := _m.Called()
 
 	if len(ret) == 0 {
-		panic("no return value specified for Reads")
+		panic("no return value specified for Readers")
 	}
 
 	var r0 []contracts.FullConfig
@@ -134,39 +134,39 @@ func (_m *ConfigBuilder) Reads() []contracts.FullConfig {
 	return r0
 }
 
-// ConfigBuilder_Reads_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Reads'
-type ConfigBuilder_Reads_Call struct {
+// ConfigBuilder_Readers_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Readers'
+type ConfigBuilder_Readers_Call struct {
 	*mock.Call
 }
 
-// Reads is a helper method to define mock.On call
-func (_e *ConfigBuilder_Expecter) Reads() *ConfigBuilder_Reads_Call {
-	return &ConfigBuilder_Reads_Call{Call: _e.mock.On("Reads")}
+// Readers is a helper method to define mock.On call
+func (_e *ConfigBuilder_Expecter) Readers() *ConfigBuilder_Readers_Call {
+	return &ConfigBuilder_Readers_Call{Call: _e.mock.On("Readers")}
 }
 
-func (_c *ConfigBuilder_Reads_Call) Run(run func()) *ConfigBuilder_Reads_Call {
+func (_c *ConfigBuilder_Readers_Call) Run(run func()) *ConfigBuilder_Readers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run()
 	})
 	return _c
 }
 
-func (_c *ConfigBuilder_Reads_Call) Return(_a0 []contracts.FullConfig) *ConfigBuilder_Reads_Call {
+func (_c *ConfigBuilder_Readers_Call) Return(_a0 []contracts.FullConfig) *ConfigBuilder_Readers_Call {
 	_c.Call.Return(_a0)
 	return _c
 }
 
-func (_c *ConfigBuilder_Reads_Call) RunAndReturn(run func() []contracts.FullConfig) *ConfigBuilder_Reads_Call {
+func (_c *ConfigBuilder_Readers_Call) RunAndReturn(run func() []contracts.FullConfig) *ConfigBuilder_Readers_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// Writes provides a mock function with no fields
-func (_m *ConfigBuilder) Writes() []contracts.FullConfig {
+// Writers provides a mock function with no fields
+func (_m *ConfigBuilder) Writers() []contracts.FullConfig {
 	ret := _m.Called()
 
 	if len(ret) == 0 {
-		panic("no return value specified for Writes")
+		panic("no return value specified for Writers")
 	}
 
 	var r0 []contracts.FullConfig
@@ -181,29 +181,29 @@ func (_m *ConfigBuilder) Writes() []contracts.FullConfig {
 	return r0
 }
 
-// ConfigBuilder_Writes_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Writes'
-type ConfigBuilder_Writes_Call struct {
+// ConfigBuilder_Writers_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Writers'
+type ConfigBuilder_Writers_Call struct {
 	*mock.Call
 }
 
-// Writes is a helper method to define mock.On call
-func (_e *ConfigBuilder_Expecter) Writes() *ConfigBuilder_Writes_Call {
-	return &ConfigBuilder_Writes_Call{Call: _e.mock.On("Writes")}
+// Writers is a helper method to define mock.On call
+func (_e *ConfigBuilder_Expecter) Writers() *ConfigBuilder_Writers_Call {
+	return &ConfigBuilder_Writers_Call{Call: _e.mock.On("Writers")}
 }
 
-func (_c *ConfigBuilder_Writes_Call) Run(run func()) *ConfigBuilder_Writes_Call {
+func (_c *ConfigBuilder_Writers_Call) Run(run func()) *ConfigBuilder_Writers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run()
 	})
 	return _c
 }
 
-func (_c *ConfigBuilder_Writes_Call) Return(_a0 []contracts.FullConfig) *ConfigBuilder_Writes_Call {
+func (_c *ConfigBuilder_Writers_Call) Return(_a0 []contracts.FullConfig) *ConfigBuilder_Writers_Call {
 	_c.Call.Return(_a0)
 	return _c
 }
 
-func (_c *ConfigBuilder_Writes_Call) RunAndReturn(run func() []contracts.FullConfig) *ConfigBuilder_Writes_Call {
+func (_c *ConfigBuilder_Writers_Call) RunAndReturn(run func() []contracts.FullConfig) *ConfigBuilder_Writers_Call {
 	_c.Call.Return(run)
 	return _c
 }

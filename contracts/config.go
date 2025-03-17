@@ -7,8 +7,8 @@ import (
 type ConfigBuilder interface {
 	Config() contractsconfig.Config
 	Connection() string
-	Reads() []FullConfig
-	Writes() []FullConfig
+	Readers() []FullConfig
+	Writers() []FullConfig
 }
 
 // Replacer replacer interface like strings.Replacer

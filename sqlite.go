@@ -1,7 +1,6 @@
 package sqlite
 
 import (
-	"database/sql"
 	"fmt"
 
 	"github.com/glebarez/sqlite"
@@ -32,33 +31,8 @@ func NewSqlite(config config.Config, log log.Log, connection string) *Sqlite {
 	}
 }
 
-func (r *Sqlite) Config() database.Config {
-	writers := r.config.Writes()
-	if len(writers) == 0 {
-		return database.Config{}
-	}
-
-	return database.Config{
-		Connection: writers[0].Connection,
-		Dsn:        writers[0].Dsn,
-		Database:   writers[0].Database,
-		Driver:     Name,
-		Prefix:     writers[0].Prefix,
-		Version:    r.getVersion(),
-	}
-}
-
-func (r *Sqlite) DB() (*sql.DB, error) {
-	gormDB, err := r.Gorm()
-	if err != nil {
-		return nil, err
-	}
-
-	return gormDB.DB()
-}
-
 func (r *Sqlite) Docker() (docker.DatabaseDriver, error) {
-	writers := r.config.Writes()
+	writers := r.config.Writers()
 	if len(writers) == 0 {
 		return nil, errors.DatabaseConfigNotFound
 	}
@@ -66,51 +40,53 @@ func (r *Sqlite) Docker() (docker.DatabaseDriver, error) {
 	return NewDocker(writers[0].Database), nil
 }
 
-func (r *Sqlite) Explain(sql string, vars ...any) string {
-	return sqlite.Open("").Explain(sql, vars...)
-}
-
-func (r *Sqlite) Gorm() (*gorm.DB, error) {
-	if r.db != nil {
-		return r.db, nil
-	}
-
-	db, err := NewGorm(r.config, r.log).Build()
-	if err != nil {
-		return nil, err
-	}
-
-	r.db = db
-
-	return db, nil
-}
-
 func (r *Sqlite) Grammar() driver.Grammar {
-	return NewGrammar(r.log, r.config.Writes()[0].Prefix)
+	return NewGrammar(r.log, r.config.Writers()[0].Prefix)
+}
+
+func (r *Sqlite) Pool() database.Pool {
+	return database.Pool{
+		Readers: r.fullConfigsToConfigs(r.config.Readers()),
+		Writers: r.fullConfigsToConfigs(r.config.Writers()),
+	}
 }
 
 func (r *Sqlite) Processor() driver.Processor {
 	return NewProcessor()
 }
 
-func (r *Sqlite) getVersion() string {
-	if r.version != "" {
-		return r.version
+func (r *Sqlite) fullConfigsToConfigs(fullConfigs []contracts.FullConfig) []database.Config {
+	configs := make([]database.Config, len(fullConfigs))
+	for i, fullConfig := range fullConfigs {
+		configs[i] = database.Config{
+			Connection:   fullConfig.Connection,
+			Dsn:          fullConfig.Dsn,
+			Database:     fullConfig.Database,
+			Dialector:    fullConfigToDialector(fullConfig),
+			Driver:       Name,
+			NameReplacer: fullConfig.NameReplacer,
+			NoLowerCase:  fullConfig.NoLowerCase,
+			Prefix:       fullConfig.Prefix,
+			Singular:     fullConfig.Singular,
+		}
 	}
 
-	instance, err := r.Gorm()
-	if err != nil {
-		return ""
+	return configs
+}
+
+func dsn(fullConfig contracts.FullConfig) string {
+	if fullConfig.Dsn != "" {
+		return fullConfig.Dsn
 	}
 
-	var version struct {
-		Value string
-	}
-	if err := instance.Raw("SELECT sqlite_version() AS value;").Scan(&version).Error; err != nil {
-		r.version = fmt.Sprintf("UNKNOWN: %s", err)
-	} else {
-		r.version = version.Value
+	return fmt.Sprintf("%s?multi_stmts=true", fullConfig.Database)
+}
+
+func fullConfigToDialector(fullConfig contracts.FullConfig) gorm.Dialector {
+	dsn := dsn(fullConfig)
+	if dsn == "" {
+		return nil
 	}
 
-	return r.version
+	return sqlite.Open(dsn)
 }

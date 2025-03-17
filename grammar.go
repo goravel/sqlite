@@ -200,6 +200,10 @@ func (r *Grammar) CompileLockForUpdateForGorm() clause.Expression {
 	return nil
 }
 
+func (r *Grammar) CompilePlaceholderFormat() driver.PlaceholderFormat {
+	return nil
+}
+
 func (r *Grammar) CompilePrimary(_ driver.Blueprint, _ *driver.Command) string {
 	return ""
 }
@@ -293,6 +297,10 @@ func (r *Grammar) CompileUnique(blueprint driver.Blueprint, command *driver.Comm
 		r.wrap.Column(command.Index),
 		r.wrap.Table(blueprint.GetTableName()),
 		r.wrap.Columnize(command.Columns))
+}
+
+func (r *Grammar) CompileVersion() string {
+	return "SELECT sqlite_version() AS value;"
 }
 
 func (r *Grammar) CompileViews(database string) string {
