@@ -18,10 +18,8 @@ import (
 var _ driver.Driver = &Sqlite{}
 
 type Sqlite struct {
-	config  contracts.ConfigBuilder
-	db      *gorm.DB
-	log     log.Log
-	version string
+	config contracts.ConfigBuilder
+	log    log.Log
 }
 
 func NewSqlite(config config.Config, log log.Log, connection string) *Sqlite {
