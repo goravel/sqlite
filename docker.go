@@ -82,5 +82,5 @@ func (r *Docker) Shutdown() error {
 }
 
 func (r *Docker) connect() (*gormio.DB, error) {
-	return gormio.Open(gormlite.Open(fmt.Sprintf("%s?multi_stmts=true", r.database)))
+	return gormio.Open(gormlite.Open(r.database))
 }

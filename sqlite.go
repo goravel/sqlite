@@ -1,8 +1,6 @@
 package sqlite
 
 import (
-	"fmt"
-
 	"github.com/goravel/framework/contracts/config"
 	"github.com/goravel/framework/contracts/database"
 	"github.com/goravel/framework/contracts/database/driver"
@@ -78,7 +76,7 @@ func dsn(fullConfig contracts.FullConfig) string {
 		return fullConfig.Dsn
 	}
 
-	return fmt.Sprintf("%s?multi_stmts=true", fullConfig.Database)
+	return fullConfig.Database
 }
 
 func fullConfigToDialector(fullConfig contracts.FullConfig) gorm.Dialector {
