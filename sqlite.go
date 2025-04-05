@@ -3,13 +3,14 @@ package sqlite
 import (
 	"fmt"
 
-	"github.com/glebarez/sqlite"
 	"github.com/goravel/framework/contracts/config"
 	"github.com/goravel/framework/contracts/database"
 	"github.com/goravel/framework/contracts/database/driver"
 	"github.com/goravel/framework/contracts/log"
 	"github.com/goravel/framework/contracts/testing/docker"
 	"github.com/goravel/framework/errors"
+	_ "github.com/ncruces/go-sqlite3/embed"
+	"github.com/ncruces/go-sqlite3/gormlite"
 	"gorm.io/gorm"
 
 	"github.com/goravel/sqlite/contracts"
@@ -86,5 +87,5 @@ func fullConfigToDialector(fullConfig contracts.FullConfig) gorm.Dialector {
 		return nil
 	}
 
-	return sqlite.Open(dsn)
+	return gormlite.Open(dsn)
 }

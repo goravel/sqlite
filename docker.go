@@ -3,9 +3,10 @@ package sqlite
 import (
 	"fmt"
 
-	"github.com/glebarez/sqlite"
 	"github.com/goravel/framework/contracts/testing/docker"
 	"github.com/goravel/framework/support/file"
+	_ "github.com/ncruces/go-sqlite3/embed"
+	"github.com/ncruces/go-sqlite3/gormlite"
 	gormio "gorm.io/gorm"
 )
 
@@ -81,5 +82,5 @@ func (r *Docker) Shutdown() error {
 }
 
 func (r *Docker) connect() (*gormio.DB, error) {
-	return gormio.Open(sqlite.Open(fmt.Sprintf("%s?multi_stmts=true", r.database)))
+	return gormio.Open(gormlite.Open(fmt.Sprintf("%s?multi_stmts=true", r.database)))
 }
