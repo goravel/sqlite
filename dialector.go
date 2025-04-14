@@ -62,13 +62,13 @@ func (dialector Dialector) ClauseBuilders() map[string]clause.ClauseBuilder {
 		"INSERT": func(c clause.Clause, builder clause.Builder) {
 			if insert, ok := c.Expression.(clause.Insert); ok {
 				if stmt, ok := builder.(*gorm.Statement); ok {
-					stmt.WriteString("INSERT ")
+					_, _ = stmt.WriteString("INSERT ")
 					if insert.Modifier != "" {
-						stmt.WriteString(insert.Modifier)
-						stmt.WriteByte(' ')
+						_, _ = stmt.WriteString(insert.Modifier)
+						_ = stmt.WriteByte(' ')
 					}
 
-					stmt.WriteString("INTO ")
+					_, _ = stmt.WriteString("INTO ")
 					if insert.Table.Name == "" {
 						stmt.WriteQuoted(stmt.Table)
 					} else {
@@ -87,12 +87,12 @@ func (dialector Dialector) ClauseBuilders() map[string]clause.ClauseBuilder {
 					lmt = *limit.Limit
 				}
 				if lmt >= 0 || limit.Offset > 0 {
-					builder.WriteString("LIMIT ")
-					builder.WriteString(strconv.Itoa(lmt))
+					_, _ = builder.WriteString("LIMIT ")
+					_, _ = builder.WriteString(strconv.Itoa(lmt))
 				}
 				if limit.Offset > 0 {
-					builder.WriteString(" OFFSET ")
-					builder.WriteString(strconv.Itoa(limit.Offset))
+					_, _ = builder.WriteString(" OFFSET ")
+					_, _ = builder.WriteString(strconv.Itoa(limit.Offset))
 				}
 			}
 		},
@@ -120,7 +120,7 @@ func (dialector Dialector) Migrator(db *gorm.DB) gorm.Migrator {
 }
 
 func (dialector Dialector) BindVarTo(writer clause.Writer, stmt *gorm.Statement, v interface{}) {
-	writer.WriteByte('?')
+	_ = writer.WriteByte('?')
 }
 
 func (dialector Dialector) QuoteTo(writer clause.Writer, str string) {
@@ -135,7 +135,7 @@ func (dialector Dialector) QuoteTo(writer clause.Writer, str string) {
 		case '`':
 			continuousBacktick++
 			if continuousBacktick == 2 {
-				writer.WriteString("``")
+				_, _ = writer.WriteString("``")
 				continuousBacktick = 0
 			}
 		case '.':
@@ -143,13 +143,13 @@ func (dialector Dialector) QuoteTo(writer clause.Writer, str string) {
 				shiftDelimiter = 0
 				underQuoted = false
 				continuousBacktick = 0
-				writer.WriteString("`")
+				_, _ = writer.WriteString("`")
 			}
-			writer.WriteByte(v)
+			_ = writer.WriteByte(v)
 			continue
 		default:
 			if shiftDelimiter-continuousBacktick <= 0 && !underQuoted {
-				writer.WriteString("`")
+				_, _ = writer.WriteString("`")
 				underQuoted = true
 				if selfQuoted = continuousBacktick > 0; selfQuoted {
 					continuousBacktick -= 1
@@ -157,18 +157,18 @@ func (dialector Dialector) QuoteTo(writer clause.Writer, str string) {
 			}
 
 			for ; continuousBacktick > 0; continuousBacktick -= 1 {
-				writer.WriteString("``")
+				_, _ = writer.WriteString("``")
 			}
 
-			writer.WriteByte(v)
+			_ = writer.WriteByte(v)
 		}
 		shiftDelimiter++
 	}
 
 	if continuousBacktick > 0 && !selfQuoted {
-		writer.WriteString("``")
+		_, _ = writer.WriteString("``")
 	}
-	writer.WriteString("`")
+	_, _ = writer.WriteString("`")
 }
 
 func (dialector Dialector) Explain(sql string, vars ...interface{}) string {
