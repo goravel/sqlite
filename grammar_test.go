@@ -3,12 +3,11 @@ package sqlite
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/suite"
-
 	contractsdriver "github.com/goravel/framework/contracts/database/driver"
 	mocksdriver "github.com/goravel/framework/mocks/database/driver"
 	mockslog "github.com/goravel/framework/mocks/log"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
 )
 
 type GrammarSuite struct {
@@ -154,6 +153,130 @@ func (s *GrammarSuite) TestCompileIndex() {
 	}
 
 	s.Equal(`create index "users" on "goravel_users" ("role_id", "permission_id")`, s.grammar.CompileIndex(mockBlueprint, command))
+}
+
+func (s *GrammarSuite) TestCompileJsonContains() {
+	tests := []struct {
+		name          string
+		column        string
+		value         any
+		isNot         bool
+		expectedSql   string
+		expectedValue []any
+	}{
+		{
+			name:          "single path with single value",
+			column:        "data->details",
+			value:         "value1",
+			expectedSql:   `exists (select 1 from json_each(json_extract("data", '$."details"')) where value = ? )`,
+			expectedValue: []any{"value1"},
+		},
+		{
+			name:          "single path with multiple values",
+			column:        "data->details",
+			value:         []string{"value1", "value2"},
+			expectedSql:   `exists (select 1 from json_each(json_extract("data", '$."details"')) where value = ? ) AND exists (select 1 from json_each(json_extract("data", '$."details"')) where value = ? )`,
+			expectedValue: []any{"value1", "value2"},
+		},
+		{
+			name:          "nested path with single value",
+			column:        "data->details->subdetails[0]",
+			value:         "value1",
+			expectedSql:   `exists (select 1 from json_each(json_extract("data", '$."details"."subdetails"[0]')) where value = ? )`,
+			expectedValue: []any{"value1"},
+		},
+		{
+			name:          "nested path with multiple values",
+			column:        "data->details[0]->subdetails",
+			value:         []string{"value1", "value2"},
+			expectedSql:   `exists (select 1 from json_each(json_extract("data", '$."details"[0]."subdetails"')) where value = ? ) AND exists (select 1 from json_each(json_extract("data", '$."details"[0]."subdetails"')) where value = ? )`,
+			expectedValue: []any{"value1", "value2"},
+		},
+		{
+			name:          "with is not condition",
+			column:        "data->details",
+			value:         "value1",
+			isNot:         true,
+			expectedSql:   `not exists (select 1 from json_each(json_extract("data", '$."details"')) where value = ? )`,
+			expectedValue: []any{"value1"},
+		},
+	}
+
+	for _, tt := range tests {
+		s.Run(tt.name, func() {
+			actualSql, actualValue, err := s.grammar.CompileJsonContains(tt.column, tt.value, tt.isNot)
+			s.Equal(tt.expectedSql, actualSql)
+			s.Equal(tt.expectedValue, actualValue)
+			s.NoError(err)
+		})
+	}
+}
+
+func (s *GrammarSuite) TestCompileJsonContainKey() {
+	tests := []struct {
+		name        string
+		column      string
+		isNot       bool
+		expectedSql string
+	}{
+		{
+			name:        "single path",
+			column:      "data->details",
+			expectedSql: `json_type("data", '$."details"') is not null`,
+		},
+		{
+			name:        "single path with is not",
+			column:      "data->details",
+			isNot:       true,
+			expectedSql: `not json_type("data", '$."details"') is not null`,
+		},
+		{
+			name:        "nested path",
+			column:      "data->details->subdetails",
+			expectedSql: `json_type("data", '$."details"."subdetails"') is not null`,
+		},
+		{
+			name:        "nested path with array index",
+			column:      "data->details[0]->subdetails",
+			expectedSql: `json_type("data", '$."details"[0]."subdetails"') is not null`,
+		},
+	}
+
+	for _, tt := range tests {
+		s.Run(tt.name, func() {
+			s.Equal(tt.expectedSql, s.grammar.CompileJsonContainsKey(tt.column, tt.isNot))
+		})
+	}
+}
+
+func (s *GrammarSuite) TestCompileJsonLength() {
+	tests := []struct {
+		name        string
+		column      string
+		expectedSql string
+	}{
+		{
+			name:        "single path",
+			column:      "data->details",
+			expectedSql: `json_array_length("data", '$."details"')`,
+		},
+		{
+			name:        "nested path",
+			column:      "data->details->subdetails",
+			expectedSql: `json_array_length("data", '$."details"."subdetails"')`,
+		},
+		{
+			name:        "nested path with array index",
+			column:      "data->details[0]->subdetails",
+			expectedSql: `json_array_length("data", '$."details"[0]."subdetails"')`,
+		},
+	}
+
+	for _, tt := range tests {
+		s.Run(tt.name, func() {
+			s.Equal(tt.expectedSql, s.grammar.CompileJsonLength(tt.column))
+		})
+	}
 }
 
 func (s *GrammarSuite) TestCompileRenameColumn() {

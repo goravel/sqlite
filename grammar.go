@@ -2,17 +2,17 @@ package sqlite
 
 import (
 	"fmt"
+	"reflect"
 	"slices"
 	"strings"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/spf13/cast"
-	"gorm.io/gorm/clause"
-
 	"github.com/goravel/framework/contracts/database/driver"
 	"github.com/goravel/framework/contracts/log"
 	"github.com/goravel/framework/database/schema"
 	"github.com/goravel/framework/support/collect"
+	"github.com/spf13/cast"
+	"gorm.io/gorm/clause"
 )
 
 var _ driver.Grammar = &Grammar{}
@@ -190,6 +190,42 @@ func (r *Grammar) CompileIndexes(_, table string) (string, error) {
 		quotedTable,
 		r.wrap.Quote(table),
 	), nil
+}
+
+func (r *Grammar) CompileJsonContains(column string, value any, isNot bool) (string, []any, error) {
+	field, path := r.wrap.JsonFieldAndPath(column)
+	query := r.wrap.Not(fmt.Sprintf("exists (select 1 from json_each(json_extract(%s%s)) where value = ? )", field, path), isNot)
+
+	if val := reflect.ValueOf(value); val.Kind() == reflect.Slice || val.Kind() == reflect.Array {
+		values := make([]any, val.Len())
+		queries := make([]string, val.Len())
+		for i := 0; i < val.Len(); i++ {
+			values[i] = val.Index(i).Interface()
+			queries[i] = query
+		}
+
+		return strings.Join(queries, " AND "), values, nil
+	}
+
+	return query, []any{value}, nil
+}
+
+func (r *Grammar) CompileJsonContainsKey(column string, isNot bool) string {
+	field, path := r.wrap.JsonFieldAndPath(column)
+
+	return r.wrap.Not(fmt.Sprintf("json_type(%s%s) is not null", field, path), isNot)
+}
+
+func (r *Grammar) CompileJsonLength(column string) string {
+	field, path := r.wrap.JsonFieldAndPath(column)
+
+	return fmt.Sprintf("json_array_length(%s%s)", field, path)
+}
+
+func (r *Grammar) CompileJsonSelector(column string) string {
+	field, path := r.wrap.JsonFieldAndPath(column)
+
+	return fmt.Sprintf("json_extract(%s%s)", field, path)
 }
 
 func (r *Grammar) CompileLockForUpdate(builder sq.SelectBuilder, conditions *driver.Conditions) sq.SelectBuilder {
