@@ -297,12 +297,12 @@ func (r *Grammar) CompileInRandomOrder(builder sq.SelectBuilder, conditions *dri
 	return builder
 }
 
-func (r *Grammar) CompileRandomOrderForGorm() string {
-	return "RANDOM()"
+func (r *Grammar) CompilePrune(_ string) string {
+	return "vacuum"
 }
 
-func (r *Grammar) CompileRebuild() string {
-	return "vacuum"
+func (r *Grammar) CompileRandomOrderForGorm() string {
+	return "RANDOM()"
 }
 
 func (r *Grammar) CompileRename(blueprint driver.Blueprint, command *driver.Command) string {
