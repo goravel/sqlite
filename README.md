@@ -10,51 +10,18 @@ The Sqlite driver for facades.Orm() of Goravel.
 
 ## Install
 
-1. Add package
+Run the command below in your project to install the package automatically:
 
-```
-go get -u github.com/goravel/sqlite
-```
+```bash
+./artisan package:install github.com/goravel/sqlite
+``` 
 
-2. Register service provider
+Or check [the setup file](./setup/setup.go) to install the package manually.
 
-```
-// config/app.go
-import "github.com/goravel/sqlite"
+## Testing
 
-"providers": []foundation.ServiceProvider{
-    ...
-    &sqlite.ServiceProvider{},
-}
-```
+Run command below to run test:
 
-3. Add Sqlite driver to `config/database.go` file
-
-```
-// config/database.go
-import (
-    "github.com/goravel/framework/contracts/database/driver"
-    "github.com/goravel/sqlite/contracts"
-    sqlitefacades "github.com/goravel/sqlite/facades"
-)
-
-"connections": map[string]any{
-    ...
-    "sqlite": map[string]any{
-        "database": config.Env("DB_DATABASE", "forge"),
-        "prefix":   "",
-        "singular": false,
-        "via": func() (driver.Driver, error) {
-            return sqlitefacades.Sqlite("sqlite")
-        },
-        // Optional
-        "dsn": "",
-        "read": []contracts.Config{
-            {Database: "forge"},
-        },
-        "write": []contracts.Config{
-            {Database: "forge"},
-        },
-    },
-}
+```bash
+go test ./...
 ```
