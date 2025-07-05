@@ -580,7 +580,7 @@ func (s *GrammarSuite) TestTypeEnum() {
 func (s *GrammarSuite) TestTypeUuid() {
 	mockColumn := mocksdriver.NewColumnDefinition(s.T())
 
-	s.Equal("char(36)", s.grammar.TypeUuid(mockColumn))
+	s.Equal("varchar(36)", s.grammar.TypeUuid(mockColumn))
 }
 
 func TestGetCommandByName(t *testing.T) {
