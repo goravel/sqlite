@@ -524,6 +524,10 @@ func (r *Grammar) TypeTinyText(column driver.ColumnDefinition) string {
 	return "text"
 }
 
+func (r *Grammar) TypeUuid(column driver.ColumnDefinition) string {
+	return "varchar(36)"
+}
+
 func (r *Grammar) addForeignKeys(commands []*driver.Command) string {
 	var sql string
 

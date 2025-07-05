@@ -577,6 +577,12 @@ func (s *GrammarSuite) TestTypeEnum() {
 	s.Equal(`varchar check ("a" in ('a', 'b'))`, s.grammar.TypeEnum(mockColumn))
 }
 
+func (s *GrammarSuite) TestTypeUuid() {
+	mockColumn := mocksdriver.NewColumnDefinition(s.T())
+
+	s.Equal("varchar(36)", s.grammar.TypeUuid(mockColumn))
+}
+
 func TestGetCommandByName(t *testing.T) {
 	commands := []*contractsdriver.Command{
 		{Name: "create"},
