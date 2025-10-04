@@ -36,7 +36,7 @@ func main() {
 			// Add sqlite connection config to database.go
 			modify.GoFile(path.Config("database.go")).
 				Find(match.Imports()).Modify(
-				modify.AddImport("driverContract"),
+				modify.AddImport(driverContract),
 				modify.AddImport(sqliteFacades, "sqlitefacades"),
 			).
 				Find(match.Config("database.connections")).Modify(modify.AddConfig("sqlite", config)).
