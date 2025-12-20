@@ -53,13 +53,13 @@ func main() {
 			Find(databaseConfig).Modify(modify.AddConfig("default", `"sqlite"`)),
 	).Uninstall(
 		// Remove sqlite connection config from database.go
-		modify.GoFile(databaseConfigPath).
+		modify.WhenFileExists(databaseConfigPath, modify.GoFile(databaseConfigPath).
 			Find(databaseConfig).Modify(modify.AddConfig("default", `""`)).
 			Find(databaseConnectionsConfig).Modify(modify.RemoveConfig("sqlite")).
 			Find(match.Imports()).Modify(
 			modify.RemoveImport(driverContract),
 			modify.RemoveImport(sqliteFacades, "sqlitefacades"),
-		),
+		)),
 
 		// Remove sqlite service provider from app.go if not using bootstrap setup
 		modify.When(func(_ map[string]any) bool {
