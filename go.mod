@@ -4,7 +4,7 @@ go 1.24.0
 
 require (
 	github.com/Masterminds/squirrel v1.5.4
-	github.com/goravel/framework v1.16.1-0.20260202061217-60e5444dde33
+	github.com/goravel/framework v1.17.0
 	github.com/ncruces/go-sqlite3 v0.25.0
 	github.com/ncruces/go-sqlite3/gormlite v0.24.0
 	github.com/spf13/cast v1.10.0
@@ -21,7 +21,7 @@ require (
 	github.com/dave/dst v0.27.3 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dromara/carbon/v2 v2.6.11 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.12 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
 	github.com/gookit/color v1.5.4 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
