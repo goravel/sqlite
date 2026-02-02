@@ -6,6 +6,7 @@ The Sqlite driver for facades.Orm() of Goravel.
 
 | goravel/sqlite | goravel/framework |
 |------------------|-------------------|
+| v1.17.x         | v1.17.x           |
 | v1.4.*          | v1.16.*           |
 
 ## Install
