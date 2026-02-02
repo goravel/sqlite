@@ -41,7 +41,7 @@ func main() {
 		// Add sqlite service provider to providers.go if using bootstrap setup
 		modify.When(func(_ map[string]any) bool {
 			return env.IsBootstrapSetup()
-		}, modify.AddProviderApply(moduleImport, sqliteServiceProvider)),
+		}, modify.RegisterProvider(moduleImport, sqliteServiceProvider)),
 
 		// Add sqlite connection config to database.go
 		modify.GoFile(path.Config("database.go")).
@@ -71,6 +71,6 @@ func main() {
 		// Remove sqlite service provider from providers.go if using bootstrap setup
 		modify.When(func(_ map[string]any) bool {
 			return env.IsBootstrapSetup()
-		}, modify.RemoveProviderApply(moduleImport, sqliteServiceProvider)),
+		}, modify.UnregisterProvider(moduleImport, sqliteServiceProvider)),
 	).Execute()
 }
