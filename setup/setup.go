@@ -18,7 +18,7 @@ func main() {
         "prefix":   "",
         "singular": false,
         "via": func() (driver.Driver, error) {
-            return sqlitefacades.Sqlite(` + driver + `)
+            return sqlitefacades.Sqlite("` + driver + `")
         },
     }`
 
@@ -29,7 +29,6 @@ func main() {
 	driverContract := "github.com/goravel/framework/contracts/database/driver"
 	sqliteFacades := "github.com/goravel/sqlite/facades"
 	databaseConnectionsConfig := match.Config("database.connections")
-	databaseConfig := match.Config("database")
 
 	setup.Install(
 		// Add sqlite service provider to app.go if not using bootstrap setup
@@ -57,7 +56,6 @@ func main() {
 	).Uninstall(
 		// Remove sqlite connection config from database.go
 		modify.WhenFileExists(databaseConfigPath, modify.GoFile(databaseConfigPath).
-			Find(databaseConfig).Modify(modify.AddConfig("default", `""`)).
 			Find(databaseConnectionsConfig).Modify(modify.RemoveConfig(driver)).
 			Find(match.Imports()).Modify(
 			modify.RemoveImport(driverContract),
