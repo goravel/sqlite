@@ -12,12 +12,13 @@ import (
 
 func main() {
 	setup := packages.Setup(os.Args)
+	driver := "sqlite"
 	config := `map[string]any{
         "database": config.Env("DB_DATABASE", "forge"),
         "prefix":   "",
         "singular": false,
         "via": func() (driver.Driver, error) {
-            return sqlitefacades.Sqlite("sqlite")
+            return sqlitefacades.Sqlite("` + driver + `")
         },
     }`
 
@@ -28,7 +29,6 @@ func main() {
 	driverContract := "github.com/goravel/framework/contracts/database/driver"
 	sqliteFacades := "github.com/goravel/sqlite/facades"
 	databaseConnectionsConfig := match.Config("database.connections")
-	databaseConfig := match.Config("database")
 
 	setup.Install(
 		// Add sqlite service provider to app.go if not using bootstrap setup
@@ -48,14 +48,15 @@ func main() {
 			Find(match.Imports()).Modify(
 			modify.AddImport(driverContract),
 			modify.AddImport(sqliteFacades, "sqlitefacades"),
-		).
-			Find(databaseConnectionsConfig).Modify(modify.AddConfig("sqlite", config)).
-			Find(databaseConfig).Modify(modify.AddConfig("default", `"sqlite"`)),
+		).Find(databaseConnectionsConfig).Modify(modify.AddConfig(driver, config)),
+
+		// Add DB_CONNECTION=sqlite to .env
+		modify.WhenFileExists(path.Base(".env"), modify.Env(path.Base(".env"), "DB_CONNECTION", driver)),
+		modify.WhenFileExists(path.Base(".env.example"), modify.Env(path.Base(".env.example"), "DB_CONNECTION", driver)),
 	).Uninstall(
 		// Remove sqlite connection config from database.go
 		modify.WhenFileExists(databaseConfigPath, modify.GoFile(databaseConfigPath).
-			Find(databaseConfig).Modify(modify.AddConfig("default", `""`)).
-			Find(databaseConnectionsConfig).Modify(modify.RemoveConfig("sqlite")).
+			Find(databaseConnectionsConfig).Modify(modify.RemoveConfig(driver)).
 			Find(match.Imports()).Modify(
 			modify.RemoveImport(driverContract),
 			modify.RemoveImport(sqliteFacades, "sqlitefacades"),
