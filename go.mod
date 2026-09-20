@@ -1,12 +1,12 @@
 module github.com/goravel/sqlite
 
-go 1.25.0
+go 1.26.0
 
 require (
 	github.com/Masterminds/squirrel v1.5.4
 	github.com/goravel/framework v1.18.0
-	github.com/ncruces/go-sqlite3 v0.25.0
-	github.com/ncruces/go-sqlite3/gormlite v0.24.0
+	github.com/ncruces/go-sqlite3 v0.35.5
+	github.com/ncruces/go-sqlite3/gormlite v0.34.0
 	github.com/spf13/cast v1.10.0
 	github.com/stretchr/testify v1.11.1
 	gorm.io/gorm v1.31.2
@@ -48,13 +48,13 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.24 // indirect
 	github.com/muesli/termenv v0.16.0 // indirect
+	github.com/ncruces/go-sqlite3-wasm/v6 v6.2.35304 // indirect
 	github.com/ncruces/julianday v1.0.0 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/pterm/pterm v0.12.83 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/samber/lo v1.53.0 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
-	github.com/tetratelabs/wazero v1.9.0 // indirect
 	github.com/urfave/cli/v3 v3.10.1 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
@@ -78,13 +78,13 @@ require (
 	go.opentelemetry.io/otel/trace v1.44.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.10.0 // indirect
 	golang.org/x/exp v0.0.0-20260611194520-c48552f49976 // indirect
-	golang.org/x/mod v0.37.0 // indirect
-	golang.org/x/net v0.56.0 // indirect
-	golang.org/x/sync v0.21.0 // indirect
-	golang.org/x/sys v0.46.0 // indirect
-	golang.org/x/term v0.44.0 // indirect
-	golang.org/x/text v0.38.0 // indirect
-	golang.org/x/tools v0.47.0 // indirect
+	golang.org/x/mod v0.41.0 // indirect
+	golang.org/x/net v0.59.0 // indirect
+	golang.org/x/sync v0.23.0 // indirect
+	golang.org/x/sys v0.48.0 // indirect
+	golang.org/x/term v0.46.0 // indirect
+	golang.org/x/text v0.42.0 // indirect
+	golang.org/x/tools v0.50.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260526163538-3dc84a4a5aaa // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
 	google.golang.org/grpc v1.81.1 // indirect

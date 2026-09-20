@@ -5,7 +5,6 @@ import (
 
 	"github.com/goravel/framework/contracts/testing/docker"
 	"github.com/goravel/framework/support/file"
-	_ "github.com/ncruces/go-sqlite3/embed"
 	"github.com/ncruces/go-sqlite3/gormlite"
 	gormio "gorm.io/gorm"
 )
